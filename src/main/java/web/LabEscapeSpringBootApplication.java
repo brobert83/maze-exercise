@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan
+@ComponentScan(basePackages = {"web", "escape"})
 public class LabEscapeSpringBootApplication {
 
     public static void main(String[] args) {
