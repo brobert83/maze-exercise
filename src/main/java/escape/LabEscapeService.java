@@ -9,7 +9,10 @@ public class LabEscapeService {
     private TypeTransformer typeTransformer;
     private LabEscape labEscape;
 
-    public LabEscapeService(TypeTransformer typeTransformer, final LabEscape labEscape) {
+    public LabEscapeService(
+            TypeTransformer typeTransformer,
+            LabEscape labEscape) {
+
         this.typeTransformer = typeTransformer;
         this.labEscape = labEscape;
     }
