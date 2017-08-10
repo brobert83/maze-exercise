@@ -13,12 +13,8 @@ import static escape.LabEscape.Motion.*;
 @Component
 public class LabEscape {
 
-    private static final char WALL = 'O';
     private static final char FREE = ' ';
-
-    //    compilation issue, will fix later
-//    private static final char PATH = '•';
-    private static final char PATH = 'X';
+    private static final char PATH = '•';
 
     /**
      * @param labyrinth A labyrinth drawn on a matrix of characters. It's at least 4x4, can be a rectangle or a square.
@@ -50,7 +46,7 @@ public class LabEscape {
             return drawPathForEscape(newLabyrinth, x, y);
         }
 
-        throw new NoEscapeException();
+        throw new NoEscapeException("Could not find any escape route");
 
     }
 

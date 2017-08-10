@@ -16,8 +16,8 @@ public class LabEscapeTest {
     char[][] expectedRoute = typeTransformer
             .toCharMatrix(
                     "OOOO\n" +
-                            "OXO \n" +
-                            "OXXX\n" +
+                            "O•O \n" +
+                            "O•••\n" +
                             "OO O\n" +
                             "OOOO");
 
@@ -65,7 +65,7 @@ public class LabEscapeTest {
         final char[][] expected = typeTransformer
                 .toCharMatrix(
                                 "OOOO\n" +
-                                "OXO \n" +
+                                "O•O \n" +
                                 "O   \n" +
                                 "OO O\n" +
                                 "OOOO");
