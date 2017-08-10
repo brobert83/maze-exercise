@@ -5,7 +5,10 @@ public class LabEscape {
 
     private static final char WALL = 'O';
     private static final char FREE = ' ';
-    private static final char PATH = '•';
+
+//    compilation issue, will fix later
+//    private static final char PATH = '•';
+    private static final char PATH = '1';
 
     /**
      * @param labyrinth A labyrinth drawn on a matrix of characters. It's at least 4x4, can be a rectangle or a square.
