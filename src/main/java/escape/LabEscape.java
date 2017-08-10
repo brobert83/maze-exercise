@@ -14,7 +14,7 @@ public class LabEscape {
 
     //    compilation issue, will fix later
 //    private static final char PATH = '•';
-    private static final char PATH = '1';
+    private static final char PATH = 'X';
 
     /**
      * @param labyrinth A labyrinth drawn on a matrix of characters. It's at least 4x4, can be a rectangle or a square.
@@ -32,7 +32,7 @@ public class LabEscape {
 
         char[][] newLabyrinth = moveToPoint(labyrinth, startX, startY);
 
-        if (isEscapePoint(newLabyrinth, startX, startY)) {
+        if (isOnTheBorder(newLabyrinth, startX, startY)) {
             return newLabyrinth;
         }
 
@@ -52,15 +52,24 @@ public class LabEscape {
     }
 
     /**
-     * Should return true if the point represents a escape
-     *
+     * Returns true if the point is on one of the borders
      * @param labyrinth The labyrinth model
      * @param x         The x coordinate
      * @param y         The y coordinate
-     * @return True if the point represents an escape, false otherwise
+     * @return True is the point is on the border, false otherwise
      */
-    boolean isEscapePoint(char[][] labyrinth, int x, int y) {
-        return false;
+    boolean isOnTheBorder(char[][] labyrinth, int x, int y) {
+        if(labyrinth == null){
+            return false;
+        }
+
+        int xLength = labyrinth.length;
+        int yLength = labyrinth[0].length;
+
+        boolean onXBorder = x == 0 || x == xLength - 1;
+        boolean onYBorder = y == 0 || y == yLength - 1;
+
+        return onXBorder || onYBorder;
     }
 
     /**

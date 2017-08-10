@@ -3,6 +3,7 @@ package escape;
 import escape.exception.NoEscapeException;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Spy;
 
 import java.util.Arrays;
 
@@ -17,31 +18,33 @@ public class LabEscapeTest {
 
     TypeTransformer typeTransformer = new TypeTransformer();
 
-    LabEscape labEscape = new LabEscape();
+    @Spy LabEscape labEscapeSpy;
+    LabEscape labEscape;
+
+    char[][] expectedRoute = typeTransformer
+            .toCharMatrix(
+                    "OOOO\n" +
+                            "OXO \n" +
+                            "OXXX\n" +
+                            "OO O\n" +
+                            "OOOO");
+
+    char[][] labyrinth = typeTransformer
+            .toCharMatrix(
+                    "OOOO\n" +
+                            "O O \n" +
+                            "O   \n" +
+                            "OO O\n" +
+                            "OOOO");
 
     @Before
     public void setUp() throws Exception {
-        labEscape = spy(LabEscape.class);
+        labEscapeSpy = spy(LabEscape.class);
+        labEscape = new LabEscape();
     }
 
     @Test
     public void drawPathForEscape_found() throws NoEscapeException {
-
-        char[][] expectedRoute = typeTransformer
-                .toCharMatrix(
-                                "OOOO\n" +
-                                "OXO \n" +
-                                "OXXX\n" +
-                                "OO O\n" +
-                                "OOOO");
-
-        char[][] labyrinth = typeTransformer
-                .toCharMatrix(
-                                "OOOO\n" +
-                                "O O \n" +
-                                "O   \n" +
-                                "OO O\n" +
-                                "OOOO");
 
         int startX = 1, startY = 1;
 
@@ -51,19 +54,19 @@ public class LabEscapeTest {
         char[][] step4a = doStep(step3, 2, 3);
         char[][] step4b = doStep(step3, 3, 2);
 
-        when(labEscape.moveToPoint(any(char[][].class), eq(startX), eq(startY))).thenReturn(step1);
-        when(labEscape.moveToPoint(any(char[][].class), eq(2), eq(1))).thenReturn(step2);
-        when(labEscape.moveToPoint(any(char[][].class), eq(2), eq(2))).thenReturn(step3);
-        when(labEscape.moveToPoint(any(char[][].class), eq(2), eq(3))).thenReturn(step4a);
-        when(labEscape.moveToPoint(any(char[][].class), eq(3), eq(2))).thenReturn(step4b);
+        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(startX), eq(startY))).thenReturn(step1);
+        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(2), eq(1))).thenReturn(step2);
+        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(2), eq(2))).thenReturn(step3);
+        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(2), eq(3))).thenReturn(step4a);
+        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(3), eq(2))).thenReturn(step4b);
 
-        when(labEscape.isEscapePoint(any(), eq(2), eq(3))).thenReturn(true);
+        when(labEscapeSpy.isOnTheBorder(any(char[][].class), eq(2), eq(3))).thenReturn(true);
 
-        when(labEscape.findMovePoints(any(char[][].class), eq(1), eq(1))).thenReturn(asList(new LabEscape.LabPoint(2, 1)));
-        when(labEscape.findMovePoints(any(char[][].class), eq(2), eq(1))).thenReturn(asList(new LabEscape.LabPoint(2, 2)));
-        when(labEscape.findMovePoints(any(char[][].class), eq(2), eq(2))).thenReturn(asList(new LabEscape.LabPoint(2, 3), new LabEscape.LabPoint(3, 2)));
+        when(labEscapeSpy.findMovePoints(any(char[][].class), eq(1), eq(1))).thenReturn(asList(new LabEscape.LabPoint(2, 1)));
+        when(labEscapeSpy.findMovePoints(any(char[][].class), eq(2), eq(1))).thenReturn(asList(new LabEscape.LabPoint(2, 2)));
+        when(labEscapeSpy.findMovePoints(any(char[][].class), eq(2), eq(2))).thenReturn(asList(new LabEscape.LabPoint(2, 3), new LabEscape.LabPoint(3, 2)));
 
-        char[][] escapeRoute = labEscape.drawPathForEscape(labyrinth, startX, startY);
+        char[][] escapeRoute = labEscapeSpy.drawPathForEscape(labyrinth, startX, startY);
 
         assertThat(typeTransformer.toMultilineString(escapeRoute))
                 .isEqualTo(typeTransformer.toMultilineString(expectedRoute));
@@ -80,6 +83,23 @@ public class LabEscapeTest {
         step[x][y] = 'X';
 
         return step;
+    }
+
+    @Test
+    public void isOnTheBorder() {
+
+        for (int x = 0; x <= labyrinth.length; x++) {
+            for (int y = 0; y <= labyrinth[0].length; y++) {
+                boolean onTheBorder = labEscape.isOnTheBorder(labyrinth, x, y);
+
+                if (x == 0 || y == 0 || x == 4 || y == 3) {
+                    assertThat(onTheBorder).as("Cell at [%d,%d] should be an on the border", x, y).isTrue();
+                } else {
+                    assertThat(onTheBorder).as("Cell at [%d,%d] should NOT be an on the border", x, y).isFalse();
+                }
+            }
+        }
+
     }
 
 }
