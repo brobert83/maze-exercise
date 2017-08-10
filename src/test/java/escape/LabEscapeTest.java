@@ -1,23 +1,17 @@
 package escape;
 
 import escape.exception.NoEscapeException;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Spy;
 
-import static java.util.Arrays.asList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 public class LabEscapeTest {
 
     TypeTransformer typeTransformer = new TypeTransformer();
 
-    @Spy LabEscape labEscapeSpy;
-    LabEscape labEscape;
+    LabEscape labEscape = new LabEscape();
 
     char[][] expectedRoute = typeTransformer
             .toCharMatrix(
@@ -35,24 +29,12 @@ public class LabEscapeTest {
                             "OO O\n" +
                             "OOOO");
 
-    @Before
-    public void setUp() throws Exception {
-        labEscapeSpy = spy(LabEscape.class);
-        labEscape = new LabEscape();
-    }
-
     @Test
     public void drawPathForEscape_found() throws NoEscapeException {
 
         int startX = 1, startY = 1;
 
-        when(labEscapeSpy.isOnTheBorder(any(char[][].class), eq(2), eq(3))).thenReturn(true);
-
-        when(labEscapeSpy.findMovePoints(any(char[][].class), eq(1), eq(1))).thenReturn(asList(new LabEscape.LabPoint(2, 1)));
-        when(labEscapeSpy.findMovePoints(any(char[][].class), eq(2), eq(1))).thenReturn(asList(new LabEscape.LabPoint(2, 2)));
-        when(labEscapeSpy.findMovePoints(any(char[][].class), eq(2), eq(2))).thenReturn(asList(new LabEscape.LabPoint(2, 3), new LabEscape.LabPoint(3, 2)));
-
-        char[][] escapeRoute = labEscapeSpy.drawPathForEscape(labyrinth, startX, startY);
+        char[][] escapeRoute = labEscape.drawPathForEscape(labyrinth, startX, startY);
 
         assertThat(typeTransformer.toMultilineString(escapeRoute))
                 .isEqualTo(typeTransformer.toMultilineString(expectedRoute));
@@ -89,6 +71,22 @@ public class LabEscapeTest {
                                 "OOOO");
 
         assertThat(typeTransformer.toMultilineString(moved)).isEqualTo(typeTransformer.toMultilineString(expected));
+    }
+
+    @Test
+    public void findMovePoints(){
+
+        List<LabEscape.LabPoint> movePoints = labEscape.findMovePoints(labyrinth, 1, 1);
+
+        assertThat(movePoints).hasSize(1);
+        assertThat(movePoints.get(0)).isEqualToComparingFieldByField(new LabEscape.LabPoint(2,1));
+
+        movePoints = labEscape.findMovePoints(labyrinth, 2, 2);
+
+        assertThat(movePoints).hasSize(3);
+        assertThat(movePoints.get(0)).isEqualToComparingFieldByField(new LabEscape.LabPoint(2,3));
+        assertThat(movePoints.get(1)).isEqualToComparingFieldByField(new LabEscape.LabPoint(3,2));
+        assertThat(movePoints.get(2)).isEqualToComparingFieldByField(new LabEscape.LabPoint(2,1));
     }
 
 }

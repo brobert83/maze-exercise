@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static escape.LabEscape.Motion.*;
 
 @Component
 public class LabEscape {
@@ -106,13 +109,45 @@ public class LabEscape {
      * The north point is the starting position, so the order is (NORTH, EST, SOUTH, WEST)
      *
      * @param labyrinth The labyrinth model
-     * @param startX    The x coordinate for the starting position
-     * @param startY    The y coordinate for the starting position
+     * @param x         The x coordinate for the starting position
+     * @param y         The y coordinate for the starting position
      * @return A set of possible move points
      */
-    List<LabPoint> findMovePoints(char[][] labyrinth, int startX, int startY) {
+    List<LabPoint> findMovePoints(char[][] labyrinth, int x, int y) {
 
-        return Collections.emptyList();
+        if (labyrinth == null) {
+            return Collections.emptyList();
+        }
+
+        List<Motion> motions = Arrays.asList(NORTH, EAST, SOUTH, WEST);
+
+        return motions.stream()
+                .filter(motion -> {
+                    int xMotion = x + motion.x;
+                    return xMotion >= 0 && xMotion < labyrinth.length;
+                })
+                .filter(motion -> {
+                    int yMotion = y + motion.y;
+                    return yMotion >= 0 && yMotion < labyrinth[0].length;
+                })
+                .filter(motion -> labyrinth[x + motion.x][y + motion.y] == FREE)
+                .map(motion -> new LabPoint(x + motion.x, y + motion.y))
+                .collect(Collectors.toList());
+    }
+
+    public static class Motion {
+
+        int x, y;
+
+        static final Motion NORTH = new Motion(-1, 0);
+        static final Motion SOUTH = new Motion(1, 0);
+        static final Motion EAST = new Motion(0, 1);
+        static final Motion WEST = new Motion(0, -1);
+
+        public Motion(final int x, final int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     public static class LabPoint {
