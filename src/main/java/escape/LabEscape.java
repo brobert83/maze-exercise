@@ -3,6 +3,7 @@ package escape;
 import escape.exception.NoEscapeException;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,20 +47,21 @@ public class LabEscape {
             return drawPathForEscape(newLabyrinth, x, y);
         }
 
-
         throw new NoEscapeException();
 
     }
 
     /**
      * Returns true if the point is on one of the borders
+     *
      * @param labyrinth The labyrinth model
      * @param x         The x coordinate
      * @param y         The y coordinate
      * @return True is the point is on the border, false otherwise
      */
     boolean isOnTheBorder(char[][] labyrinth, int x, int y) {
-        if(labyrinth == null){
+
+        if (labyrinth == null) {
             return false;
         }
 
@@ -82,7 +84,19 @@ public class LabEscape {
      */
     char[][] moveToPoint(char[][] labyrinth, int x, int y) {
 
-        return new char[0][];
+        if (labyrinth == null) {
+            return null;
+        }
+
+        char[][] motion = new char[labyrinth.length][labyrinth[0].length];
+
+        for (int i = 0; i < labyrinth.length; i++) {
+            motion[i] = Arrays.copyOf(labyrinth[i], labyrinth[i].length);
+        }
+
+        motion[x][y] = PATH;
+
+        return motion;
     }
 
 

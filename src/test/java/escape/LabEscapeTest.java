@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Spy;
 
-import java.util.Arrays;
-
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -48,18 +46,6 @@ public class LabEscapeTest {
 
         int startX = 1, startY = 1;
 
-        char[][] step1 = doStep(labyrinth, startX, startY);
-        char[][] step2 = doStep(step1, 2, 1);
-        char[][] step3 = doStep(step2, 2, 2);
-        char[][] step4a = doStep(step3, 2, 3);
-        char[][] step4b = doStep(step3, 3, 2);
-
-        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(startX), eq(startY))).thenReturn(step1);
-        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(2), eq(1))).thenReturn(step2);
-        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(2), eq(2))).thenReturn(step3);
-        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(2), eq(3))).thenReturn(step4a);
-        when(labEscapeSpy.moveToPoint(any(char[][].class), eq(3), eq(2))).thenReturn(step4b);
-
         when(labEscapeSpy.isOnTheBorder(any(char[][].class), eq(2), eq(3))).thenReturn(true);
 
         when(labEscapeSpy.findMovePoints(any(char[][].class), eq(1), eq(1))).thenReturn(asList(new LabEscape.LabPoint(2, 1)));
@@ -70,19 +56,6 @@ public class LabEscapeTest {
 
         assertThat(typeTransformer.toMultilineString(escapeRoute))
                 .isEqualTo(typeTransformer.toMultilineString(expectedRoute));
-    }
-
-    char[][] doStep(char[][] labyrinth, int x, int y) {
-
-        char[][] step = new char[labyrinth.length][labyrinth[0].length];
-
-        for (int i = 0; i < labyrinth.length; i++) {
-            step[i] = Arrays.copyOf(labyrinth[i], labyrinth[i].length);
-        }
-
-        step[x][y] = 'X';
-
-        return step;
     }
 
     @Test
@@ -100,6 +73,22 @@ public class LabEscapeTest {
             }
         }
 
+    }
+
+    @Test
+    public void moveToPoint(){
+
+        char[][] moved = labEscape.moveToPoint(labyrinth, 1, 1);
+
+        final char[][] expected = typeTransformer
+                .toCharMatrix(
+                        "OOOO\n" +
+                                "OXO \n" +
+                                "O   \n" +
+                                "OO O\n" +
+                                "OOOO");
+
+        assertThat(typeTransformer.toMultilineString(moved)).isEqualTo(typeTransformer.toMultilineString(expected));
     }
 
 }
