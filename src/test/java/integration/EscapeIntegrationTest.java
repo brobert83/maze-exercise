@@ -13,25 +13,25 @@ public class EscapeIntegrationTest {
 
         String labyrinth
                 = "OOOOOOOOOO\n" +
-                "\tO    O   O\n" +
-                "\tO OO O O O\n" +
-                "\tO  O O O O\n" +
-                "\tO OO   O  \n" +
-                "\tO OOOOOOOO\n" +
-                "\tO        O\n" +
-                "\tOOOOOOOOOO";
+                  "O    O   O\n" +
+                  "O OO O O O\n" +
+                  "O  O O O O\n" +
+                  "O OO   O  \n" +
+                  "O OOOOOOOO\n" +
+                  "O        O\n" +
+                  "OOOOOOOOOO";
         int startX = 3;
         int startY = 1;
 
         String expectedEscapeRoute
                 = "OOOOOOOOOO\n" +
-                "\tO1111O111O\n" +
-                "\tO1OO1O1O1O\n" +
-                "\tO1 O1O1O1O\n" +
-                "\tO OO111O11\n" +
-                "\tO OOOOOOOO\n" +
-                "\tO        O\n" +
-                "\tOOOOOOOOOO";
+                  "OXXXXOXXXO\n" +
+                  "OXOOXOXOXO\n" +
+                  "OX OXOXOXO\n" +
+                  "O OOXXXOXX\n" +
+                  "O OOOOOOOO\n" +
+                  "O        O\n" +
+                  "OOOOOOOOOO";
 
         String escapeRoute = Unirest.post("http://localhost:8080/escapeRoute")
                 .field("labyrinth", labyrinth)
@@ -39,6 +39,6 @@ public class EscapeIntegrationTest {
                 .field("startY", startY)
                 .asString().getBody();
 
-        assertThat(escapeRoute).isEqualTo(labyrinth + "\n" + startX + "\n" + startY);
+        assertThat(escapeRoute).isEqualTo(expectedEscapeRoute);
     }
 }

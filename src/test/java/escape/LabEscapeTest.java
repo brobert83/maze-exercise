@@ -64,7 +64,7 @@ public class LabEscapeTest {
 
         final char[][] expected = typeTransformer
                 .toCharMatrix(
-                        "OOOO\n" +
+                                "OOOO\n" +
                                 "OXO \n" +
                                 "O   \n" +
                                 "OO O\n" +

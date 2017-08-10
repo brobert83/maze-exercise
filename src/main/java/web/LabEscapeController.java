@@ -26,10 +26,9 @@ public class LabEscapeController {
 
         try {
             String escapeRoute = labEscapeService.findEscapeRoute(labyrinth, startX, startY);
-
-            return new ResponseEntity<String>(escapeRoute, HttpStatus.OK);
+            return new ResponseEntity<>(escapeRoute, HttpStatus.OK);
         } catch (NoEscapeException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
     }
