@@ -27,6 +27,7 @@ public class LabEscape {
             int startX,
             int startY) throws NoEscapeException {
 
+        // 2 hours passed since I looked at the spec
         return new char[][]{};
     }
 }
