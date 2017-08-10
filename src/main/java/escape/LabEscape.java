@@ -22,8 +22,11 @@ public class LabEscape {
      * @return          A char matrix with the same labyrinth and a path drawn from the starting point to the escape
      * @throws          NoEscapeException when no path exists to the outside, from the selected starting point
      */
-    public char[][] drawPathForEscape(char[][] labyrinth, int startX, int startY) throws NoEscapeException {
+    public char[][] drawPathForEscape(
+            char[][] labyrinth,
+            int startX,
+            int startY) throws NoEscapeException {
 
-        throw new UnsupportedOperationException("please implement");
+        return new char[][]{};
     }
 }
