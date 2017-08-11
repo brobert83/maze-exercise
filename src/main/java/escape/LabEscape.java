@@ -30,6 +30,20 @@ public class LabEscape {
             int startX,
             int startY) throws NoEscapeException {
 
+        char[][] route = findRoute(labyrinth, startX, startY);
+
+        if (route == null) {
+            throw new NoEscapeException("Could not find any escape route");
+        }
+
+        return route;
+    }
+
+    char[][] findRoute(
+            char[][] labyrinth,
+            int startX,
+            int startY) throws NoEscapeException {
+
         char[][] newLabyrinth = moveToPoint(labyrinth, startX, startY);
 
         if (isOnTheBorder(newLabyrinth, startX, startY)) {
@@ -38,16 +52,23 @@ public class LabEscape {
 
         List<LabPoint> movePoints = findMovePoints(newLabyrinth, startX, startY);
 
+        if (movePoints.isEmpty()) {
+            return null;
+        }
+
         for (LabPoint movePoint : movePoints) {
 
             int x = movePoint.getX();
             int y = movePoint.getY();
 
-            return drawPathForEscape(newLabyrinth, x, y);
+            char[][] route = findRoute(newLabyrinth, x, y);
+            if (route != null) {
+                return route;
+            }
+
         }
 
-        throw new NoEscapeException("Could not find any escape route");
-
+        return null;
     }
 
     /**

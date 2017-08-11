@@ -56,6 +56,44 @@ public class EscapeIntegrationTest {
     }
 
     @Test
+    public void drawPathForEscape_backtrack() throws UnirestException {
+
+        String labyrinth
+                =
+                "OOOOOOOOOO\n" +
+                "O    O   O\n" +
+                "O OO O O O\n" +
+                "O  O O O O\n" +
+                "O OO   O O\n" +
+                "O OOO OOOO\n" +
+                "O        O\n" +
+                "OOOOOOOO O";
+
+        int startX = 3;
+        int startY = 1;
+
+        String expectedEscapeRoute
+                =
+                "OOOOOOOOOO\n" +
+                "O••••O   O\n" +
+                "O•OO•O O O\n" +
+                "O• O•O O O\n" +
+                "O OO•• O O\n" +
+                "O OOO•OOOO\n" +
+                "O    ••••O\n" +
+                "OOOOOOOO•O";
+
+        HttpResponse<String> escapeRoute = Unirest.post(URL)
+                .field("labyrinth", labyrinth)
+                .field("startX", startX)
+                .field("startY", startY)
+                .asObject(String.class);
+
+        assertThat(escapeRoute.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(escapeRoute.getBody()).isEqualTo(expectedEscapeRoute);
+    }
+
+    @Test
     public void noEscape() throws UnirestException {
 
         String noEscapelabyrinth =
